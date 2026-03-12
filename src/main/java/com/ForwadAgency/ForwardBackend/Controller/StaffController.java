@@ -41,6 +41,8 @@ public class StaffController {
     @PostMapping("/user/auth/login")
     public Users checkUser(@RequestBody Users user)
     {
+        System.out.println("this is name : "+user.getName());
+
         return userService.authUser(user);
     }
 

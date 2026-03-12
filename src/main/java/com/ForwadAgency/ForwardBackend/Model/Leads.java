@@ -18,5 +18,6 @@ public class Leads
     private String phoneNumber;
     private String requirements;
     private String clientName;
-    private LocalDateTime enquiry_entry= LocalDateTime.now();
+    private String enquiryEntry;
+    private String addedBy;
 }

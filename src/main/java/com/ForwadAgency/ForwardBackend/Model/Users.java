@@ -19,4 +19,5 @@ public class Users {
     private String  brandName;
     private String  password;
     private String  secretKey;
+    private String status;
 }

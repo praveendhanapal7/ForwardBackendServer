@@ -26,7 +26,10 @@ public class UserService {
             a.setBrandName(user.getBrandName());
             accessModelRepo.save(a);
         }
+        if(userRepo.findByEmail(user.getEmail())==null)
         return userRepo.save(user);
+        else
+        return null;
     }
 
 
