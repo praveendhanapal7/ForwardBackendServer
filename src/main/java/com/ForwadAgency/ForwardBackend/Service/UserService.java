@@ -16,6 +16,9 @@ public class UserService {
     UserRepo userRepo;
 
     @Autowired
+    AccessModelService accessModelService;
+
+    @Autowired
     AccessModelRepo accessModelRepo;
 
     public Users addUser(Users user) {
@@ -26,8 +29,12 @@ public class UserService {
             a.setBrandName(user.getBrandName());
             accessModelRepo.save(a);
         }
-        if(userRepo.findByEmail(user.getEmail())==null)
+        if(userRepo.findByEmail(user.getEmail())==null) {
+
+            user.setBrandName(accessModelService.getBrandName(user.getSecretKey()));
+
         return userRepo.save(user);
+        }
         else
         return null;
     }

@@ -33,6 +33,7 @@ public class StaffController {
     @PostMapping("/add/user")
     public Users addUsers(@RequestBody Users user)
     {
+        System.out.println("User : "+user);
         return userService.addUser(user);
     }
 
