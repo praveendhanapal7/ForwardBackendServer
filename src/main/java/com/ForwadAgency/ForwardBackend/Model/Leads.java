@@ -20,4 +20,5 @@ public class Leads
     private String clientName;
     private String enquiryEntry;
     private String addedBy;
+    private String status;
 }
