@@ -23,20 +23,28 @@ public class UserService {
 
     public Users addUser(Users user) {
 
-        AccessModel  a= new AccessModel();
-        if(user.getBrandName()!=null) {
+        if (user == null || user.getEmail() == null || user.getEmail().isBlank()) {
+            throw new RuntimeException("Email is required");
+        }
+
+        AccessModel a = new AccessModel();
+        if (user.getBrandName() != null && !user.getBrandName().isBlank()) {
             a.setSecretKey(user.getSecretKey());
             a.setBrandName(user.getBrandName());
             accessModelRepo.save(a);
         }
-        if(userRepo.findByEmail(user.getEmail())==null) {
 
-            user.setBrandName(accessModelService.getBrandName(user.getSecretKey()));
-
-        return userRepo.save(user);
+        if (userRepo.findByEmail(user.getEmail()) != null) {
+            throw new RuntimeException("User already exists");
         }
-        else
-        return null;
+
+        String brandName = user.getBrandName();
+        if (brandName == null || brandName.isBlank()) {
+            brandName = accessModelService.getBrandName(user.getSecretKey());
+        }
+
+        user.setBrandName(brandName);
+        return userRepo.save(user);
     }
 
 

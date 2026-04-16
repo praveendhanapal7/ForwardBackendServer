@@ -17,10 +17,16 @@ public class AccessModelService {
 
     public String getBrandName(String key)
     {
-        System.out.println("This is "+key);
+        if (key == null || key.isBlank()) {
+            return null;
+        }
 
-        System.out.println(accessModelRepo.getAccessModelBySecretKey(key));
-        return accessModelRepo.getAccessModelBySecretKey(key).getBrandName();
+        AccessModel accessModel = accessModelRepo.getAccessModelBySecretKey(key);
+        if (accessModel == null) {
+            return null;
+        }
+
+        return accessModel.getBrandName();
     }
 
     public List<String> getAllBrands(String a)
