@@ -15,11 +15,9 @@ public class CorsConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOriginPatterns(
-                                "http://localhost:5173",
-                                "http://127.0.0.1:5173",
-                                "https://forwardagencies.netlify.app",
-                                "https://forwardagencyindia.netlify.app"
+                        .allowedOrigins(
+                                "https://forwardagency.in",
+                                "https://www.forwardagency.in"
                         )
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*")
