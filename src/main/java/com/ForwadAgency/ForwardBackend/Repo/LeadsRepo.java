@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface LeadsRepo extends JpaRepository< Leads, String> {
+public interface LeadsRepo extends JpaRepository<Leads, Integer> {
     List<Leads> findAllByClientName(String clientName);
 }

@@ -30,6 +30,13 @@ public class StaffController {
     }
 
     @CrossOrigin(origins = "http://localhost:5173")
+    @PutMapping("/leads/{id}/status")
+    public Leads updateLeadStatus(@PathVariable Integer id, @RequestBody Leads leads)
+    {
+        return leadsService.updateLeadStatus(id, leads.getStatus());
+    }
+
+    @CrossOrigin(origins = "http://localhost:5173")
     @PostMapping("/add/user")
     public Users addUsers(@RequestBody Users user)
     {
