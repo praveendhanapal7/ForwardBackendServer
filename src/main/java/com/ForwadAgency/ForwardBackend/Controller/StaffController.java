@@ -5,6 +5,7 @@ import com.ForwadAgency.ForwardBackend.Model.Users;
 import com.ForwadAgency.ForwardBackend.Service.LeadsService;
 import com.ForwadAgency.ForwardBackend.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -48,6 +49,8 @@ public class StaffController {
             return ResponseEntity.badRequest().body(exception.getMessage());
         } catch (IllegalStateException exception) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(exception.getMessage());
+        } catch (DataIntegrityViolationException exception) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("User already exists");
         } catch (Exception exception) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Unable to create account right now");

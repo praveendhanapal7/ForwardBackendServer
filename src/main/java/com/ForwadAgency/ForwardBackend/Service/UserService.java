@@ -5,6 +5,7 @@ import com.ForwadAgency.ForwardBackend.Model.Users;
 import com.ForwadAgency.ForwardBackend.Repo.AccessModelRepo;
 import com.ForwadAgency.ForwardBackend.Repo.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -28,6 +29,10 @@ public class UserService {
             throw new IllegalArgumentException("Password is required");
         }
 
+        if (user.getSecretKey() == null || user.getSecretKey().isBlank()) {
+            throw new IllegalArgumentException("Access code is required");
+        }
+
         if (user.getBrandName() != null && !user.getBrandName().isBlank()
                 && user.getSecretKey() != null && !user.getSecretKey().isBlank()) {
             AccessModel a = new AccessModel();
@@ -45,12 +50,33 @@ public class UserService {
             brandName = accessModelService.getBrandName(user.getSecretKey());
         }
 
+        if ((user.getAccountType() == null || user.getAccountType().isBlank())
+                && brandName != null && !brandName.isBlank()) {
+            user.setAccountType("client");
+        }
+
         if (user.getName() == null || user.getName().isBlank()) {
             user.setName(user.getEmail());
         }
 
+        if (user.getPhoneNumber() == null || user.getPhoneNumber().isBlank()) {
+            user.setPhoneNumber("NA");
+        }
+
+        if ((user.getAccountType() == null || user.getAccountType().isBlank())
+                || user.getAccountType().equalsIgnoreCase("staff")
+                || user.getAccountType().equalsIgnoreCase("Agency Staff")) {
+            if (brandName == null || brandName.isBlank()) {
+                throw new IllegalArgumentException("Access code is invalid");
+            }
+        }
+
         user.setBrandName(brandName);
-        return userRepo.save(user);
+        try {
+            return userRepo.save(user);
+        } catch (DataIntegrityViolationException exception) {
+            throw new IllegalStateException("User already exists");
+        }
     }
 
 

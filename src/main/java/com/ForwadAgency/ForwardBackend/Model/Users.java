@@ -1,16 +1,20 @@
 package com.ForwadAgency.ForwardBackend.Model;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
 @Entity
 public class Users {
 
+    @JsonAlias("fullName")
     private String name;
     @Id
     private String email;
+    @JsonAlias("phone")
     private String phoneNumber;
     private String location;
+    @JsonAlias("role")
     private String accountType;
     private String  brandName;
     private String  password;

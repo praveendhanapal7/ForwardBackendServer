@@ -16,6 +16,7 @@ public class CorsConfig {
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
                         .allowedOrigins(
+
                                 "https://forwardagency.in",
                                 "https://www.forwardagency.in"
                         )
