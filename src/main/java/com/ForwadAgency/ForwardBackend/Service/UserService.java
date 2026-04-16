@@ -4,11 +4,8 @@ import com.ForwadAgency.ForwardBackend.Model.AccessModel;
 import com.ForwadAgency.ForwardBackend.Model.Users;
 import com.ForwadAgency.ForwardBackend.Repo.AccessModelRepo;
 import com.ForwadAgency.ForwardBackend.Repo.UserRepo;
-import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.sql.SQLOutput;
 
 @Service
 public class UserService {
@@ -24,23 +21,32 @@ public class UserService {
     public Users addUser(Users user) {
 
         if (user == null || user.getEmail() == null || user.getEmail().isBlank()) {
-            throw new RuntimeException("Email is required");
+            throw new IllegalArgumentException("Email is required");
         }
 
-        AccessModel a = new AccessModel();
-        if (user.getBrandName() != null && !user.getBrandName().isBlank()) {
+        if (user.getPassword() == null || user.getPassword().isBlank()) {
+            throw new IllegalArgumentException("Password is required");
+        }
+
+        if (user.getBrandName() != null && !user.getBrandName().isBlank()
+                && user.getSecretKey() != null && !user.getSecretKey().isBlank()) {
+            AccessModel a = new AccessModel();
             a.setSecretKey(user.getSecretKey());
             a.setBrandName(user.getBrandName());
             accessModelRepo.save(a);
         }
 
         if (userRepo.findByEmail(user.getEmail()) != null) {
-            throw new RuntimeException("User already exists");
+            throw new IllegalStateException("User already exists");
         }
 
         String brandName = user.getBrandName();
         if (brandName == null || brandName.isBlank()) {
             brandName = accessModelService.getBrandName(user.getSecretKey());
+        }
+
+        if (user.getName() == null || user.getName().isBlank()) {
+            user.setName(user.getEmail());
         }
 
         user.setBrandName(brandName);
