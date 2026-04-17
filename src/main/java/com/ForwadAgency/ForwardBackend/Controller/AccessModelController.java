@@ -59,6 +59,7 @@ public class AccessModelController
 
         if(access.getSecretKey().equals("forward@2025"))
         {
+            System.out.println("These are the brands :"+accessModelService.getAllBrands("forward@2025"));
             return accessModelService.getAllBrands("forward@2025");
         }
         else

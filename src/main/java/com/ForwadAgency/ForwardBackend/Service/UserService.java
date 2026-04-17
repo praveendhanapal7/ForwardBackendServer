@@ -7,6 +7,7 @@ import com.ForwadAgency.ForwardBackend.Repo.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class UserService {
@@ -19,6 +20,7 @@ public class UserService {
     @Autowired
     AccessModelRepo accessModelRepo;
 
+    @Transactional
     public Users addUser(Users user) {
 
         if (user == null || user.getEmail() == null || user.getEmail().isBlank()) {
@@ -33,20 +35,23 @@ public class UserService {
             throw new IllegalArgumentException("Access code is required");
         }
 
-        if (user.getBrandName() != null && !user.getBrandName().isBlank()
-                && user.getSecretKey() != null && !user.getSecretKey().isBlank()) {
-            AccessModel a = new AccessModel();
-            a.setSecretKey(user.getSecretKey());
-            a.setBrandName(user.getBrandName());
-            accessModelRepo.save(a);
-        }
-
         if (userRepo.findByEmail(user.getEmail()) != null) {
             throw new IllegalStateException("User already exists");
         }
 
         String brandName = user.getBrandName();
-        if (brandName == null || brandName.isBlank()) {
+        AccessModel existingAccessModel = accessModelRepo.getAccessModelBySecretKey(user.getSecretKey());
+
+        if (brandName != null && !brandName.isBlank()) {
+            if (existingAccessModel == null) {
+                AccessModel newAccessModel = new AccessModel();
+                newAccessModel.setSecretKey(user.getSecretKey());
+                newAccessModel.setBrandName(brandName);
+                accessModelRepo.save(newAccessModel);
+            } else if (!brandName.equals(existingAccessModel.getBrandName())) {
+                throw new IllegalStateException("Access code already belongs to another brand");
+            }
+        } else {
             brandName = accessModelService.getBrandName(user.getSecretKey());
         }
 
@@ -75,7 +80,7 @@ public class UserService {
         try {
             return userRepo.save(user);
         } catch (DataIntegrityViolationException exception) {
-            throw new IllegalStateException("User already exists");
+            throw new IllegalStateException("Unable to create user with the provided details");
         }
     }
 

@@ -21,6 +21,22 @@ public class LeadsService {
 
     public Leads addLeads(Leads leads)
     {
+
+        String a = leads.getPhoneNumber();
+
+// remove spaces
+        a = a.replace(" ", "");
+
+// take last 10 digits (+1 for safety if needed)
+        a = a.substring(a.length() - 10);
+
+// add country code
+        a = "+91" + a;
+
+        leads.setPhoneNumber(a);
+
+        System.out.println(a);
+
         return leadsRepo.save(leads);
     }
 

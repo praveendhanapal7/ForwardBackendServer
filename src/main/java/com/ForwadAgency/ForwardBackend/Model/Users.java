@@ -1,6 +1,7 @@
 package com.ForwadAgency.ForwardBackend.Model;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
@@ -8,6 +9,7 @@ import jakarta.persistence.Id;
 public class Users {
 
     @JsonAlias("fullName")
+    @Column(name = "full_name")
     private String name;
     @Id
     private String email;
