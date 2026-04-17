@@ -24,7 +24,7 @@ public class Leads
     }
 
     public void setLink(String link) {
-        Link = link;
+        this.Link = link;
     }
 
     public Integer getId() {
