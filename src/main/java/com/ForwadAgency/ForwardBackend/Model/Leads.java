@@ -17,6 +17,15 @@ public class Leads
     private String enquiryEntry;
     private String addedBy;
     private String status;
+    private String Link;
+
+    public String getLink() {
+        return Link;
+    }
+
+    public void setLink(String link) {
+        Link = link;
+    }
 
     public Integer getId() {
         return id;
