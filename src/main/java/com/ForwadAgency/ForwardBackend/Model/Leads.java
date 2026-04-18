@@ -18,6 +18,7 @@ public class Leads
     private String addedBy;
     private String status;
     private String Link;
+    private String notes;
 
     public String getLink() {
         return Link;
@@ -25,6 +26,14 @@ public class Leads
 
     public void setLink(String link) {
         this.Link = link;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
     }
 
     public Integer getId() {

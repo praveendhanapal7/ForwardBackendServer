@@ -54,4 +54,12 @@ public class LeadsService {
        return leadsRepo.findAllByClientName(name);
     }
 
+    public Leads addNotes(Leads leads)
+    {
+        Leads existingLead = leadsRepo.findById(leads.getId())
+                .orElseThrow(() -> new RuntimeException("Lead not found with id: " + leads.getId()));
+
+        existingLead.setNotes(leads.getNotes());
+        return leadsRepo.save(existingLead);
+    }
 }
