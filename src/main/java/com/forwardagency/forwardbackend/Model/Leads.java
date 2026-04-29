@@ -1,13 +1,13 @@
 package com.forwardagency.forwardbackend.Model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 @Entity
-public class Leads
-{
+public class Leads {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -19,6 +19,9 @@ public class Leads
     private String status;
     private String Link;
     private String notes;
+
+    @Column(columnDefinition = "TEXT")
+    private String log;
 
     public String getLink() {
         return Link;
@@ -90,5 +93,13 @@ public class Leads
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getLog() {
+        return log;
+    }
+
+    public void setLog(String log) {
+        this.log = log;
     }
 }

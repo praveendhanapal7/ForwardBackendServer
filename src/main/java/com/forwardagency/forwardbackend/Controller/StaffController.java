@@ -65,19 +65,27 @@ public class StaffController {
 
     @PostMapping("/add/notes")
     public Leads addingNotes(@RequestBody Leads leads, HttpServletRequest request) {
-        CurrentUser.require(request);
-        return leadsService.addNotes(leads);
+        Users caller = CurrentUser.require(request);
+        String changedBy = CurrentUser.isAgency(caller)
+                ? caller.getName() + " (Agency Member)"
+                : caller.getName();
+        return leadsService.addNotes(leads, changedBy);
     }
 
     @PutMapping("/leads/{id}/status")
     public Leads updateLeadStatus(@PathVariable Integer id,
                                   @RequestBody LeadStatusRequest body,
                                   HttpServletRequest request) {
-        CurrentUser.require(request);
+        Users caller = CurrentUser.require(request);
         if (body == null || body.status() == null || body.status().isBlank()) {
             throw new IllegalArgumentException("Status is required");
         }
-        return leadsService.updateLeadStatus(id, body.status());
+
+        String changedBy = CurrentUser.isAgency(caller)
+                ? caller.getName() + " (Agency Member)"
+                : caller.getName();
+
+        return leadsService.updateLeadStatus(id, body.status(), changedBy);
     }
 
     @PostMapping("/add/user")
