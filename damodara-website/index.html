@@ -130,45 +130,50 @@
     }
 
     .hero {
-      display: grid;
-      grid-template-columns: 1.1fr 0.9fr;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
       min-height: calc(100svh - 72px);
       background: linear-gradient(160deg, #FDF4E3 0%, #F5E4C8 55%, #EDD8B2 100%);
-      align-items: center;
       overflow: hidden;
       position: relative;
+      text-align: center;
     }
 
-    /* Animated ambient glow in hero background */
+    /* Animated ambient glow — centered */
     .hero::before {
       content:'';
-      position:absolute; top:35%; right:20%;
-      width:min(55vw,650px); height:min(55vw,650px);
+      position:absolute; top:50%; left:50%;
+      transform:translate(-50%,-50%);
+      width:min(70vw,800px); height:min(70vw,800px);
       border-radius:50%;
-      background:radial-gradient(circle, rgba(255,200,80,.14) 0%, rgba(212,144,15,.06) 35%, transparent 60%);
+      background:radial-gradient(circle, rgba(255,200,80,.13) 0%, rgba(212,144,15,.05) 40%, transparent 65%);
       pointer-events:none;
       animation:hero-bg-glow 5s ease-in-out infinite;
     }
 
-    /* Decorative concentric rings (right side) */
+    /* Decorative concentric rings — centered */
     .hero-rings {
-      position:absolute; top:50%; right:20%;
-      transform:translate(50%,-50%);
-      width:min(52vw,560px); height:min(52vw,560px);
+      position:absolute; top:50%; left:50%;
+      transform:translate(-50%,-50%);
+      width:min(72vw,700px); height:min(72vw,700px);
       pointer-events:none; z-index:0;
     }
     .hero-rings span {
       position:absolute; inset:0; border-radius:50%;
-      border:1px solid rgba(192,122,10,.1);
+      border:1px solid rgba(192,122,10,.08);
       animation:ring-expand 4s ease-out infinite;
     }
     .hero-rings span:nth-child(2){ animation-delay:1.3s; inset:-15%; }
     .hero-rings span:nth-child(3){ animation-delay:2.6s; inset:-30%; }
 
     .hero-left {
-      padding: 72px 48px 72px 64px;
+      padding: 80px 40px;
       display: flex; flex-direction: column;
+      align-items: center;
       position:relative; z-index:1;
+      max-width: 860px; width: 100%;
     }
 
     .hero-eyebrow {
@@ -209,9 +214,9 @@
     .hero-title .line-cursive {
       font-family: 'Cormorant Garamond', serif;
       font-style: italic; font-weight: 400;
-      font-size: clamp(1.5rem, 3vw, 2.8rem);
+      font-size: clamp(2.2rem, 4.5vw, 4rem);
       color: var(--gold-rich);
-      display: block; margin-top: 4px;
+      display: block; margin-top: 8px;
       letter-spacing: .02em;
       animation: h-fade-up .6s cubic-bezier(.22,1,.36,1) both .72s;
     }
@@ -229,7 +234,7 @@
       font-family: 'Cormorant Garamond', serif;
       font-style: italic; font-size: clamp(1.05rem, 1.7vw, 1.3rem);
       color: var(--fg-mid); line-height: 1.75;
-      margin: 0 0 28px; max-width: 44ch;
+      margin: 0 0 28px; max-width: 56ch;
       animation: h-fade-up .65s cubic-bezier(.22,1,.36,1) both 1.05s;
     }
 
@@ -648,6 +653,87 @@
     }
     .invite-strip { color:rgba(245,228,200,.75); }
     .invite-strip strong { color:var(--gold-rich); }
+
+    /* ==============================================
+       ABOUT SECTION — two-column with image
+       ============================================== */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 56px;
+      align-items: center;
+      margin-bottom: 48px;
+    }
+    .about-img-wrap {
+      display: flex; justify-content: center;
+    }
+    .about-img {
+      width: 100%; max-width: 440px;
+      mix-blend-mode: multiply;
+      filter: drop-shadow(0 12px 40px rgba(59,21,8,.14));
+      border-radius: 4px;
+    }
+    @media (max-width: 900px) {
+      .about-grid { grid-template-columns: 1fr; gap: 32px; }
+      .about-img-wrap { order: -1; }
+      .about-img { max-width: 300px; }
+    }
+
+    /* ==============================================
+       REGISTER SECTION — CTA only
+       ============================================== */
+    .register-cta {
+      text-align: center;
+      padding: 56px 40px;
+    }
+    .register-cta .section-title { margin-bottom: 12px; }
+    .register-cta .body-text { max-width: 52ch; margin: 0 auto 32px; }
+
+    /* ==============================================
+       MODAL
+       ============================================== */
+    .modal-overlay {
+      position: fixed; inset: 0; z-index: 500;
+      background: rgba(20,6,2,.75);
+      backdrop-filter: blur(5px);
+      display: flex; align-items: center; justify-content: center;
+      padding: 20px;
+      opacity: 0; pointer-events: none;
+      transition: opacity .28s cubic-bezier(.22,1,.36,1);
+    }
+    .modal-overlay.open {
+      opacity: 1; pointer-events: all;
+    }
+    .modal-card {
+      background: var(--bg-white);
+      border: 1px solid var(--card-bdr);
+      border-radius: 4px;
+      padding: clamp(24px, 5vw, 44px);
+      max-width: 700px; width: 100%;
+      max-height: 90vh; overflow-y: auto;
+      position: relative;
+      transform: translateY(24px) scale(.98);
+      transition: transform .3s cubic-bezier(.22,1,.36,1);
+    }
+    .modal-overlay.open .modal-card {
+      transform: translateY(0) scale(1);
+    }
+    .modal-close {
+      position: absolute; top: 14px; right: 16px;
+      background: none; border: none; cursor: pointer;
+      font-size: 1.6rem; color: var(--fg-light); line-height: 1;
+      padding: 4px 8px; border-radius: 2px;
+      transition: color .15s, background .15s;
+    }
+    .modal-close:hover { color: var(--fg); background: rgba(192,122,10,.08); }
+    .modal-header { margin-bottom: 4px; padding-right: 32px; }
+    .modal-title {
+      font-family: 'Cinzel', serif; font-size: 1.35rem; font-weight: 700;
+      color: var(--fg); margin-bottom: 4px;
+    }
+    .modal-sub {
+      font-size: .85rem; color: var(--fg-mid); margin-bottom: 20px;
+    }
   </style>
 </head>
 <body>
@@ -661,7 +747,7 @@
       <span class="nav-sub">Hare Krishna Temple</span>
     </div>
   </div>
-  <a href="#register" class="btn-primary">Register Now</a>
+  <button class="btn-primary open-modal" id="navRegisterBtn">Register Now</button>
 </nav>
 
 <!-- HERO -->
@@ -684,73 +770,9 @@
       <span>·</span>
       Every Evening, 7:00 PM Onwards
     </div>
-    <a href="#register" class="btn-primary">Register Your Venue</a>
-  </div>
-  <div class="hero-right">
-    <div class="hero-img-wrap">
-      <div class="hero-img-glow"></div>
-      <img src="damodara-illustration.webp" alt="Mother Yashoda and Lord Damodara — the Dāmodara pastime" class="hero-img">
-    </div>
+    <button class="btn-primary open-modal">Register Your Venue</button>
   </div>
 </section>
-
-<!-- INVITE STRIP -->
-<div class="invite-strip">
-  <strong>Offer a Lamp to Lord Damodara</strong> — We warmly invite you and your family to participate in this auspicious month of devotion, prayers and the lighting of lamps.
-</div>
-
-<!-- LAMP DIVIDER -->
-<div class="lamp-divider">
-  <div class="lamp-row">
-    <!-- Lamp 1 -->
-    <svg viewBox="0 0 60 72" width="50" height="60" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <circle cx="30" cy="46" r="22" fill="rgba(255,150,20,.12)"/>
-      <circle cx="30" cy="46" r="13" fill="rgba(255,180,30,.18)"/>
-      <ellipse cx="30" cy="58" rx="21" ry="6" fill="#7A3A10"/>
-      <path d="M11 55 Q30 43 49 55 Q41 64 19 64 Z" fill="#B06820"/>
-      <path d="M17 53 Q30 47 43 53 L39 62 Q30 65 21 62 Z" fill="#D4900F"/>
-      <line x1="30" y1="50" x2="30" y2="37" stroke="#5C3317" stroke-width="2" stroke-linecap="round"/>
-      <g class="diya-flame" style="transform-origin:30px 37px">
-        <ellipse cx="30" cy="29" rx="8" ry="12" fill="rgba(255,100,0,.18)"/>
-        <path d="M30 13 C27 20,21 27,23 34 C24 39,30 41,30 41 C30 41,36 39,37 34 C39 27,33 20,30 13 Z" fill="#FF8800" opacity=".9"/>
-        <path d="M30 19 C28 24,25 29,26 34 C27 38,30 40,30 40 C30 40,33 38,34 34 C35 29,32 24,30 19 Z" fill="#FFE040" opacity=".88"/>
-        <ellipse cx="30" cy="32" rx="3" ry="4" fill="rgba(255,255,200,.75)"/>
-      </g>
-    </svg>
-    <span class="lamp-word">Deepotsavam</span>
-    <!-- Lamp 2 (center, larger) -->
-    <svg viewBox="0 0 60 72" width="62" height="74" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <circle cx="30" cy="44" r="26" fill="rgba(255,150,20,.14)"/>
-      <circle cx="30" cy="44" r="15" fill="rgba(255,180,30,.2)"/>
-      <ellipse cx="30" cy="58" rx="22" ry="6.5" fill="#7A3A10"/>
-      <path d="M10 55 Q30 42 50 55 Q41 65 19 65 Z" fill="#B06820"/>
-      <path d="M16 53 Q30 46 44 53 L40 62 Q30 66 20 62 Z" fill="#D4900F"/>
-      <line x1="30" y1="49" x2="30" y2="35" stroke="#5C3317" stroke-width="2.2" stroke-linecap="round"/>
-      <g class="diya-flame" style="transform-origin:30px 35px;animation-duration:1.5s">
-        <ellipse cx="30" cy="27" rx="9" ry="14" fill="rgba(255,100,0,.2)"/>
-        <path d="M30 10 C27 18,20 25,22 33 C24 39,30 42,30 42 C30 42,36 39,38 33 C40 25,33 18,30 10 Z" fill="#FF8800" opacity=".92"/>
-        <path d="M30 17 C27.5 23,24 29,25 34 C26 38,30 41,30 41 C30 41,34 38,35 34 C36 29,32.5 23,30 17 Z" fill="#FFE040" opacity=".9"/>
-        <ellipse cx="30" cy="31" rx="3.5" ry="5" fill="rgba(255,255,210,.8)"/>
-      </g>
-    </svg>
-    <span class="lamp-word">Festival of Lamps</span>
-    <!-- Lamp 3 -->
-    <svg viewBox="0 0 60 72" width="50" height="60" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <circle cx="30" cy="46" r="22" fill="rgba(255,150,20,.12)"/>
-      <circle cx="30" cy="46" r="13" fill="rgba(255,180,30,.18)"/>
-      <ellipse cx="30" cy="58" rx="21" ry="6" fill="#7A3A10"/>
-      <path d="M11 55 Q30 43 49 55 Q41 64 19 64 Z" fill="#B06820"/>
-      <path d="M17 53 Q30 47 43 53 L39 62 Q30 65 21 62 Z" fill="#D4900F"/>
-      <line x1="30" y1="50" x2="30" y2="37" stroke="#5C3317" stroke-width="2" stroke-linecap="round"/>
-      <g class="diya-flame" style="transform-origin:30px 37px;animation-duration:2s;animation-delay:.6s">
-        <ellipse cx="30" cy="29" rx="8" ry="12" fill="rgba(255,100,0,.18)"/>
-        <path d="M30 13 C27 20,21 27,23 34 C24 39,30 41,30 41 C30 41,36 39,37 34 C39 27,33 20,30 13 Z" fill="#FF8800" opacity=".9"/>
-        <path d="M30 19 C28 24,25 29,26 34 C27 38,30 40,30 40 C30 40,33 38,34 34 C35 29,32 24,30 19 Z" fill="#FFE040" opacity=".88"/>
-        <ellipse cx="30" cy="32" rx="3" ry="4" fill="rgba(255,255,200,.75)"/>
-      </g>
-    </svg>
-  </div>
-</div>
 
 <!-- ABOUT -->
 <section class="section" id="about">
@@ -758,12 +780,19 @@
     <p class="eyebrow">The Sacred Month</p>
     <h2 class="section-title">What is Damodar Month?</h2>
     <div class="hairline"></div>
-    <p class="body-text">
-      Damodar Month — called <em>Kārtika</em> in the Vaishnava calendar — is the holiest month of the year, observed from late October through November. Its name recalls the day Mother Yashoda, in loving anger at her mischievous son, tied Him around the waist with a rope. <em>Dāmodara</em> means "He who was bound around the abdomen." The Lord, who cannot be held by any force, let Himself be bound by one thing alone — a mother's pure, selfless love.
-    </p>
-    <p class="body-text">
-      During this month, devotees offer a ghee lamp each evening and sing the <em>Damodarashtakam</em> — eight sacred verses glorifying this divine pastime. The Padma Purāṇa declares that a single lamp offered in Kārtika erases the sins of many births.
-    </p>
+    <div class="about-grid">
+      <div class="about-text">
+        <p class="body-text">
+          Damodar Month — called <em>Kārtika</em> in the Vaishnava calendar — is the holiest month of the year, observed from late October through November. Its name recalls the day Mother Yashoda, in loving anger at her mischievous son, tied Him around the waist with a rope. <em>Dāmodara</em> means "He who was bound around the abdomen." The Lord, who cannot be held by any force, let Himself be bound by one thing alone — a mother's pure, selfless love.
+        </p>
+        <p class="body-text" style="margin-top:14px">
+          During this month, devotees offer a ghee lamp each evening and sing the <em>Damodarashtakam</em> — eight sacred verses glorifying this divine pastime. The Padma Purāṇa declares that a single lamp offered in Kārtika erases the sins of many births.
+        </p>
+      </div>
+      <div class="about-img-wrap">
+        <img src="damodara-about.webp" alt="Mother Yashoda and Lord Damodara — the Dāmodara pastime" class="about-img">
+      </div>
+    </div>
     <div class="facts-row reveal">
       <div class="fact">
         <span class="fact-num">30</span>
@@ -814,75 +843,85 @@
   </div>
 </section>
 
-<!-- REGISTRATION FORM -->
-<section class="section" id="register">
+<!-- REGISTRATION CTA -->
+<section class="section" id="register" style="text-align:center">
   <div class="section-inner">
     <p class="eyebrow">Reserve Your Spot</p>
     <h2 class="section-title">Host Damodar Month at Your Place</h2>
-    <div class="hairline"></div>
-    <p class="body-text">Fill in the details below. Our team will reach out within 48 hours to confirm your program date.</p>
-
-    <div class="form-card reveal">
-      <form id="regForm" novalidate>
-        <div class="fg-grid">
-          <div class="fg">
-            <label for="f_name">Full Name <span class="req">*</span></label>
-            <input type="text" id="f_name" name="name" required placeholder="Your full name" autocomplete="name">
-          </div>
-          <div class="fg">
-            <label for="f_phone">Phone Number <span class="req">*</span></label>
-            <input type="tel" id="f_phone" name="phone" required placeholder="+91 XXXXX XXXXX" autocomplete="tel">
-          </div>
-          <div class="fg">
-            <label for="f_email">Email Address</label>
-            <input type="email" id="f_email" name="email" placeholder="Optional" autocomplete="email">
-          </div>
-          <div class="fg">
-            <label for="f_area">Area / Locality <span class="req">*</span></label>
-            <input type="text" id="f_area" name="area" required placeholder="e.g. R.S. Puram, Saibaba Colony">
-          </div>
-          <div class="fg wide">
-            <label for="f_address">Full Address <span class="req">*</span></label>
-            <input type="text" id="f_address" name="address" required placeholder="Door no., street name, landmark" autocomplete="street-address">
-          </div>
-          <div class="fg">
-            <label for="f_capacity">Venue Capacity <span class="req">*</span></label>
-            <select id="f_capacity" name="capacity" required>
-              <option value="">Approximate number of guests</option>
-              <option value="10-20">10 – 20 people</option>
-              <option value="20-40">20 – 40 people</option>
-              <option value="40-60">40 – 60 people</option>
-              <option value="60-100">60 – 100 people</option>
-              <option value="100+">More than 100</option>
-            </select>
-          </div>
-          <div class="fg">
-            <label for="f_week">Preferred Week</label>
-            <select id="f_week" name="prefWeek">
-              <option value="">Any week in Kārtika</option>
-              <option value="oct-late">Late October</option>
-              <option value="nov-early">Early November</option>
-              <option value="nov-mid">Mid November</option>
-              <option value="nov-late">Late November</option>
-            </select>
-          </div>
-          <div class="fg wide">
-            <label for="f_notes">Additional Notes</label>
-            <textarea id="f_notes" name="notes" placeholder="Special requirements, accessibility needs, parking, or any questions…"></textarea>
-          </div>
-        </div>
-        <div class="status-msg" id="formStatus" aria-live="polite"></div>
-        <button type="submit" class="submit-btn" id="submitBtn">Register to Host — Free Program</button>
-        <p class="form-note">🙏 This program is offered completely free by ISKCON Coimbatore. Hare Krishna!</p>
-      </form>
-      <div id="successCard" style="display:none" class="success-card">
-        🙏 Hare Krishna! Your registration has been received.<br>
-        Our team will contact you within 48 hours to confirm your program.<br>
-        <span style="font-weight:400;font-size:.9em">Thank you for opening your home to the Lord!</span>
-      </div>
-    </div>
+    <div class="hairline" style="margin:0 auto 24px"></div>
+    <p class="body-text" style="margin:0 auto 32px">Our devotees will personally visit your home for a traditional pūjā, kīrtan &amp; lamp offering — entirely free. It takes under two minutes to register.</p>
+    <button class="btn-primary open-modal" style="font-size:1rem;padding:14px 36px;letter-spacing:.06em">Register Your Venue — Free</button>
+    <p style="font-size:.78rem;color:var(--fg-light);margin-top:14px">🙏 Completely free. ISKCON Coimbatore. Hare Krishna!</p>
   </div>
 </section>
+
+<!-- REGISTRATION MODAL -->
+<div class="modal-overlay" id="registerModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="modal-card">
+    <button class="modal-close" id="modalClose" aria-label="Close">&times;</button>
+    <div class="modal-header">
+      <h2 class="modal-title" id="modalTitle">Host Damodar Month at Your Place</h2>
+      <p class="modal-sub">Fill in the details below. Our team will reach out within 48 hours to confirm your program date.</p>
+    </div>
+    <form id="regForm" novalidate>
+      <div class="fg-grid">
+        <div class="fg">
+          <label for="f_name">Full Name <span class="req">*</span></label>
+          <input type="text" id="f_name" name="name" required placeholder="Your full name" autocomplete="name">
+        </div>
+        <div class="fg">
+          <label for="f_phone">Phone Number <span class="req">*</span></label>
+          <input type="tel" id="f_phone" name="phone" required placeholder="+91 XXXXX XXXXX" autocomplete="tel">
+        </div>
+        <div class="fg">
+          <label for="f_email">Email Address</label>
+          <input type="email" id="f_email" name="email" placeholder="Optional" autocomplete="email">
+        </div>
+        <div class="fg">
+          <label for="f_area">Area / Locality <span class="req">*</span></label>
+          <input type="text" id="f_area" name="area" required placeholder="e.g. R.S. Puram, Saibaba Colony">
+        </div>
+        <div class="fg wide">
+          <label for="f_address">Full Address <span class="req">*</span></label>
+          <input type="text" id="f_address" name="address" required placeholder="Door no., street name, landmark" autocomplete="street-address">
+        </div>
+        <div class="fg">
+          <label for="f_capacity">Venue Capacity <span class="req">*</span></label>
+          <select id="f_capacity" name="capacity" required>
+            <option value="">Approximate number of guests</option>
+            <option value="10-20">10 – 20 people</option>
+            <option value="20-40">20 – 40 people</option>
+            <option value="40-60">40 – 60 people</option>
+            <option value="60-100">60 – 100 people</option>
+            <option value="100+">More than 100</option>
+          </select>
+        </div>
+        <div class="fg">
+          <label for="f_week">Preferred Week</label>
+          <select id="f_week" name="prefWeek">
+            <option value="">Any week in Kārtika</option>
+            <option value="oct-late">Late October</option>
+            <option value="nov-early">Early November</option>
+            <option value="nov-mid">Mid November</option>
+            <option value="nov-late">Late November</option>
+          </select>
+        </div>
+        <div class="fg wide">
+          <label for="f_notes">Additional Notes</label>
+          <textarea id="f_notes" name="notes" placeholder="Special requirements, accessibility needs, parking, or any questions…"></textarea>
+        </div>
+      </div>
+      <div class="status-msg" id="formStatus" aria-live="polite"></div>
+      <button type="submit" class="submit-btn" id="submitBtn">Register to Host — Free Program</button>
+      <p class="form-note">🙏 This program is offered completely free by ISKCON Coimbatore. Hare Krishna!</p>
+    </form>
+    <div id="successCard" style="display:none" class="success-card">
+      🙏 Hare Krishna! Your registration has been received.<br>
+      Our team will contact you within 48 hours to confirm your program.<br>
+      <span style="font-weight:400;font-size:.9em">Thank you for opening your home to the Lord!</span>
+    </div>
+  </div>
+</div>
 
 <!-- FOOTER -->
 <footer class="foot">
@@ -952,6 +991,29 @@
 
 <script>
 /* =====================================================
+   MODAL
+   ===================================================== */
+const modal = document.getElementById('registerModal');
+
+function openModal() {
+  modal.classList.add('open');
+  document.body.style.overflow = 'hidden';
+  modal.querySelector('.modal-card').scrollTop = 0;
+}
+function closeModal() {
+  modal.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+document.getElementById('modalClose').addEventListener('click', closeModal);
+modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+document.querySelectorAll('.open-modal').forEach(el => {
+  el.addEventListener('click', e => { e.preventDefault(); openModal(); });
+});
+
+/* =====================================================
    CONFIG
    ===================================================== */
 const API_BASE = '/api';
@@ -1008,7 +1070,6 @@ document.getElementById('regForm').addEventListener('submit', async e => {
     }
     form.style.display = 'none';
     document.getElementById('successCard').style.display = 'block';
-    document.getElementById('successCard').scrollIntoView({ behavior:'smooth', block:'center' });
   } catch (err) {
     status.textContent = err.message;
     status.className = 'status-msg err';
