@@ -85,6 +85,50 @@
     /* ==============================================
        HERO — elegant two-column
        ============================================== */
+
+    /* ---- Hero entrance keyframes ---- */
+    @keyframes h-fade-up {
+      from { opacity:0; transform:translateY(24px); }
+      to   { opacity:1; transform:translateY(0); }
+    }
+    @keyframes h-fade-left {
+      from { opacity:0; transform:translateX(-18px); }
+      to   { opacity:1; transform:translateX(0); }
+    }
+    @keyframes h-rule-grow {
+      from { width:0; opacity:0; }
+      to   { width:56px; opacity:1; }
+    }
+    @keyframes h-img-enter {
+      from { opacity:0; transform:translateY(30px) scale(.97); }
+      to   { opacity:1; transform:translateY(0) scale(1); }
+    }
+    @keyframes float-bob {
+      0%,100%{ transform:translateY(0); }
+      45%    { transform:translateY(-14px); }
+    }
+    @keyframes gold-shimmer {
+      0%   { background-position: -250% center; }
+      100% { background-position:  250% center; }
+    }
+    @keyframes ring-expand {
+      0%  { transform:translate(-50%,-50%) scale(.8); opacity:0; }
+      30% { opacity:.5; }
+      100%{ transform:translate(-50%,-50%) scale(1.15); opacity:0; }
+    }
+    @keyframes hero-bg-glow {
+      0%,100%{ opacity:.6; transform:translate(0,0) scale(1); }
+      50%    { opacity:1;  transform:translate(-2%,2%) scale(1.06); }
+    }
+    @keyframes btn-breathe {
+      0%,100%{ box-shadow:0 0 0 0 rgba(212,144,15,0); }
+      50%    { box-shadow:0 0 0 8px rgba(212,144,15,.18); }
+    }
+    @keyframes cursive-write {
+      from { clip-path:inset(0 100% 0 0); }
+      to   { clip-path:inset(0 0% 0 0); }
+    }
+
     .hero {
       display: grid;
       grid-template-columns: 1.1fr 0.9fr;
@@ -95,15 +139,43 @@
       position: relative;
     }
 
+    /* Animated ambient glow in hero background */
+    .hero::before {
+      content:'';
+      position:absolute; top:35%; right:20%;
+      width:min(55vw,650px); height:min(55vw,650px);
+      border-radius:50%;
+      background:radial-gradient(circle, rgba(255,200,80,.14) 0%, rgba(212,144,15,.06) 35%, transparent 60%);
+      pointer-events:none;
+      animation:hero-bg-glow 5s ease-in-out infinite;
+    }
+
+    /* Decorative concentric rings (right side) */
+    .hero-rings {
+      position:absolute; top:50%; right:20%;
+      transform:translate(50%,-50%);
+      width:min(52vw,560px); height:min(52vw,560px);
+      pointer-events:none; z-index:0;
+    }
+    .hero-rings span {
+      position:absolute; inset:0; border-radius:50%;
+      border:1px solid rgba(192,122,10,.1);
+      animation:ring-expand 4s ease-out infinite;
+    }
+    .hero-rings span:nth-child(2){ animation-delay:1.3s; inset:-15%; }
+    .hero-rings span:nth-child(3){ animation-delay:2.6s; inset:-30%; }
+
     .hero-left {
       padding: 72px 48px 72px 64px;
       display: flex; flex-direction: column;
+      position:relative; z-index:1;
     }
 
     .hero-eyebrow {
       font-size: .68rem; font-weight: 700;
       letter-spacing: .28em; text-transform: uppercase;
       color: var(--gold-rich); margin-bottom: 22px;
+      animation: h-fade-left .6s cubic-bezier(.22,1,.36,1) both .15s;
     }
 
     /* Three-line headline: small / BIG / gold-cursive */
@@ -115,11 +187,24 @@
       font-size: clamp(1.1rem, 2vw, 1.5rem);
       font-weight: 400; color: var(--fg-mid);
       display: block; letter-spacing: .04em;
+      animation: h-fade-up .65s cubic-bezier(.22,1,.36,1) both .35s;
     }
     .hero-title .line-lg {
       font-size: clamp(2.8rem, 5.5vw, 5.2rem);
-      font-weight: 900; color: var(--fg);
-      display: block; line-height: .95;
+      font-weight: 900; display: block; line-height: .95;
+      /* Gold shimmer sweep across the title */
+      background: linear-gradient(
+        90deg,
+        var(--fg) 0%, var(--fg) 30%,
+        #D4900F 45%, #FFE080 50%, #D4900F 55%,
+        var(--fg) 70%, var(--fg) 100%
+      );
+      background-size: 300% auto;
+      -webkit-background-clip: text; background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation:
+        h-fade-up .7s cubic-bezier(.22,1,.36,1) both .5s,
+        gold-shimmer 4.5s linear 1.8s infinite;
     }
     .hero-title .line-cursive {
       font-family: 'Cormorant Garamond', serif;
@@ -128,13 +213,15 @@
       color: var(--gold-rich);
       display: block; margin-top: 4px;
       letter-spacing: .02em;
+      animation: h-fade-up .6s cubic-bezier(.22,1,.36,1) both .72s;
     }
 
     /* Hairline divider */
     .hero-rule {
-      width: 56px; height: 1.5px;
+      height: 1.5px;
       background: linear-gradient(to right, var(--gold), transparent);
       margin: 28px 0;
+      animation: h-rule-grow .7s cubic-bezier(.22,1,.36,1) both .92s;
     }
 
     /* Cursive tagline */
@@ -143,6 +230,7 @@
       font-style: italic; font-size: clamp(1.05rem, 1.7vw, 1.3rem);
       color: var(--fg-mid); line-height: 1.75;
       margin: 0 0 28px; max-width: 44ch;
+      animation: h-fade-up .65s cubic-bezier(.22,1,.36,1) both 1.05s;
     }
 
     /* Date pill */
@@ -154,22 +242,36 @@
       padding: 8px 18px;
       font-size: .85rem; color: var(--fg-mid);
       margin-bottom: 36px; flex-wrap: wrap;
+      animation: h-fade-up .6s cubic-bezier(.22,1,.36,1) both 1.2s;
     }
     .hero-date strong { color: var(--fg); font-weight: 700; }
     .hero-date span { color: var(--gold); }
 
+    /* CTA button — fades in and then subtly breathes */
+    .hero .btn-primary {
+      animation:
+        h-fade-up .6s cubic-bezier(.22,1,.36,1) both 1.38s,
+        btn-breathe 2.8s ease-in-out 2.5s infinite;
+    }
+
     /* Right column — illustration floats on the gradient */
     .hero-right {
       display: flex; align-items: flex-end; justify-content: center;
-      padding: 0 24px 0 0; position: relative;
+      padding: 0 24px 0 0; position: relative; z-index:1;
     }
     .hero-img {
       width: 100%;
       display: block;
-      /* multiply blends white background into the cream gradient */
       mix-blend-mode: multiply;
       filter: drop-shadow(0 8px 32px rgba(59,21,8,.12));
       position:relative; z-index:1;
+      animation: h-img-enter .9s cubic-bezier(.22,1,.36,1) both .3s;
+    }
+
+    /* Illustration gentle float */
+    .hero-img-wrap {
+      position:relative; width:100%; max-width:500px;
+      animation: float-bob 5.5s ease-in-out 1.5s infinite;
     }
 
     /* ==============================================
@@ -427,6 +529,15 @@
 
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { transition: none !important; animation: none !important; }
+      .hero-title .line-lg {
+        background: none; -webkit-text-fill-color: var(--fg); color: var(--fg);
+      }
+    }
+
+    @media (max-width: 900px) {
+      /* Disable float bob on mobile — saves battery and avoids jank */
+      .hero-img-wrap { animation: none; }
+      .hero-rings { display:none; }
     }
 
     /* ============================================================
@@ -489,7 +600,6 @@
     }
 
     /* --- Hero illustration glow --- */
-    .hero-img-wrap { position:relative; width:100%; max-width:500px; }
     .hero-img-glow {
       position:absolute; bottom:8%; left:50%;
       transform:translateX(-50%);
@@ -557,6 +667,7 @@
 <!-- HERO -->
 <section class="hero" id="home">
   <div class="hero-particles" id="heroParticles"></div>
+  <div class="hero-rings" aria-hidden="true"><span></span><span></span><span></span></div>
   <div class="hero-left">
     <p class="hero-eyebrow">ISKCON Coimbatore &nbsp;·&nbsp; Kārtika 2026</p>
     <h1 class="hero-title">
